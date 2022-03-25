@@ -4,9 +4,9 @@
  const cartItem = document.getElementById("cart__items");
  // Recuperation de l'element graphique totalQuantity (span pour afficher le total des quantité)
  const totalQuantity = document.getElementById('totalQuantity');
- // Recuperation de l'element graphique totalQuantity (span pour afficher le total des prix total)
+ // Recuperation de l'element graphique totalprice (span pour afficher le total des prix total)
  const totalPrice = document.getElementById('totalPrice');
- // Recuperation de l'element graphique totalQuantity (span pour afficher le total des prix total)
+ // Recuperation de l'element graphique delete item (class pour afficher le total des prix total)
  const deleteItems = document.getElementsByClassName('deleteItem');
  // Definition de la variable qui va sommer les quantités
  let sumQuantity = 0;
@@ -21,8 +21,9 @@
      Elle calculera egalement la somme des quantités dans la boucle qui affiche le contenu du panier
  */
  async function displayPanier() {
-     // Copie de la liste de panier pour pouvoir avoir la possibilité de modifier panier dans la boucle
-     const result = [...panier];
+     panier = panier ? panier : []
+         // Copie de la liste de panier pour pouvoir avoir la possibilité de modifier panier dans la boucle
+     const result = panier ? [...panier] : [];
      // Parcours de la liste panier recuperée depuis localStorage
      for (let i = 0; i < panier.length; i++) {
          // Definition de la variable produit qui va se balader dans la boucle
@@ -195,3 +196,172 @@
      // Sauvegarde de la liste panier modifié dans le localStorage
      localStorage.setItem("panier", JSON.stringify(panier));
  }
+
+
+ let inputName = false
+ let inputLastName = false
+ let inputAdress = false
+ let inputCity = false
+ let inputMail = false
+
+
+ //Instauration formulaire avec regex
+ function getForm() {
+     // Ajout des Regex
+     let form = document.querySelector(".cart__order__form");
+
+     //Création des expressions régulières
+     let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
+     let charRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
+     let addressRegExp = new RegExp("^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
+
+     // Ecoute de la modification du prénom
+     form.firstName.addEventListener('change', function() {
+         validFirstName(this);
+     });
+
+     // Ecoute de la modification du prénom
+     form.lastName.addEventListener('change', function() {
+         validLastName(this);
+     });
+
+     // Ecoute de la modification du prénom
+     form.address.addEventListener('change', function() {
+         validAddress(this);
+     });
+
+     // Ecoute de la modification du prénom
+     form.city.addEventListener('change', function() {
+         validCity(this);
+     });
+
+     // Ecoute de la modification du prénom
+     form.email.addEventListener('change', function() {
+         validEmail(this);
+     });
+
+     //validation du prénom
+     const validFirstName = function(event) {
+         let firstNameErrorMsg = event.nextElementSibling;
+         inputName = charRegExp.test(event.value)
+         if (inputName) {
+             firstNameErrorMsg.innerHTML = '';
+         } else {
+             firstNameErrorMsg.innerHTML = 'Veuillez renseigner ce champ.';
+         }
+     };
+
+     //validation du nom
+     const validLastName = function(event) {
+         let lastNameErrorMsg = event.nextElementSibling;
+         inputLastName = charRegExp.test(event.value)
+         if (inputLastName) {
+             lastNameErrorMsg.innerHTML = '';
+         } else {
+             lastNameErrorMsg.innerHTML = 'Veuillez renseigner ce champ.';
+         }
+     };
+
+     //validation de l'adresse
+     const validAddress = function(event) {
+         let addressErrorMsg = event.nextElementSibling;
+         inputAdress = addressRegExp.test(event.value)
+         if (inputAdress) {
+             addressErrorMsg.innerHTML = '';
+         } else {
+             addressErrorMsg.innerHTML = 'Veuillez renseigner ce champ.';
+         }
+     };
+
+     //validation de la ville
+     const validCity = function(event) {
+         let cityErrorMsg = event.nextElementSibling;
+         inputCity = charRegExp.test(event.value)
+         if (inputCity) {
+             cityErrorMsg.innerHTML = '';
+         } else {
+             cityErrorMsg.innerHTML = 'Veuillez renseigner ce champ.';
+         }
+     };
+
+     //validation de l'email
+     const validEmail = function(event) {
+         let emailErrorMsg = event.nextElementSibling;
+         inputMail = emailRegExp.test(event.value)
+         if (inputMail) {
+             emailErrorMsg.innerHTML = '';
+         } else {
+             emailErrorMsg.innerHTML = 'Veuillez renseigner votre email.';
+         }
+     };
+ }
+ getForm();
+
+ //Envoi des informations client au localstorage
+ function postForm() {
+     const btn_commander = document.getElementById("order");
+
+     //Ecouter le panier
+     btn_commander.addEventListener("click", (event) => {
+
+         //Récupération des coordonnées du formulaire client
+         event.preventDefault();
+         if (panier ? panier.length < 1 : true) {
+             alert("votre panier est vide")
+
+             return
+         }
+         if (!inputName ||
+             !inputLastName ||
+             !inputCity ||
+             !inputAdress ||
+             !inputMail
+         ) {
+             alert("Vous devez renseigner tous les champs !");
+
+         } else {
+
+             //Construction d'un array depuis le local storage
+             let idProducts = [];
+             for (let i = 0; i < panier.length; i++) {
+                 idProducts.push(panier[i].Produit);
+             }
+             console.log(idProducts);
+
+             const order = {
+                 contact: {
+                     firstName: inputName.value,
+                     lastName: inputLastName.value,
+                     address: inputAdress.value,
+                     city: inputCity.value,
+                     email: inputMail.value,
+                 },
+                 products: idProducts,
+             }
+
+             console.log(order);
+             const options = {
+                 method: 'POST',
+                 body: JSON.stringify(order),
+                 headers: {
+                     'Accept': 'application/json',
+                     "Content-type": "application/json"
+                 },
+             };
+
+             fetch("http://localhost:3000/api/products/order", options)
+                 .then((response) => { return response.json() })
+                 .then((data) => {
+                     console.log(data);
+                     //    localStorage.clear();
+                     localStorage.setItem("orderId", data.orderId);
+
+                     //         document.location.href = "confirmation.html";
+                 })
+                 .catch((err) => {
+                     alert("Problème avec fetch : " + err.message);
+                 });
+         }
+     })
+ }
+ postForm();
