@@ -1,5 +1,7 @@
 const url = "http://localhost:3000/api/products"
 
+
+//-- appel de la méthode Fetch pour récupérer l'ensemble des articles
 fetch(url).then(function(reponse) {
     return reponse.json()
 }).then(function(data) {
@@ -17,7 +19,7 @@ function displayItem(data) {
               <img src="${item.imageUrl}" alt="${item.altTxt}">
               <h3 class="productName">${item.name}</h3>
               <p class="productDescription">${item.description}</p>
-            </article>
+            </article>   
           </a>`
     }
 }

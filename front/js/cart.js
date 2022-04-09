@@ -324,17 +324,17 @@
              //Construction d'un array depuis le local storage
              let idProducts = [];
              for (let i = 0; i < panier.length; i++) {
-                 idProducts.push(panier[i].Produit);
+                 idProducts.push(panier[i].produit);
              }
              console.log(idProducts);
 
              const order = {
                  contact: {
-                     firstName: inputName.value,
-                     lastName: inputLastName.value,
-                     address: inputAdress.value,
-                     city: inputCity.value,
-                     email: inputMail.value,
+                     firstName: firstName.value,
+                     lastName: lastName.value,
+                     address: address.value,
+                     city: city.value,
+                     email: email.value,
                  },
                  products: idProducts,
              }
@@ -356,7 +356,8 @@
                      //    localStorage.clear();
                      localStorage.setItem("orderId", data.orderId);
 
-                     //         document.location.href = "confirmation.html";
+                     location.href = "confirmation.html?id=" + data.orderId;
+
                  })
                  .catch((err) => {
                      alert("Problème avec fetch : " + err.message);
