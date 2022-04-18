@@ -1,12 +1,12 @@
  // Recuperation du panier depuis le localStorage
  let panier = JSON.parse(localStorage.getItem("panier"));
- // Recuperation de l'element graphique cart__items (section pour afficher le panier)
+
  const cartItem = document.getElementById("cart__items");
- // Recuperation de l'element graphique totalQuantity (span pour afficher le total des quantité)
+
  const totalQuantity = document.getElementById('totalQuantity');
- // Recuperation de l'element graphique totalprice (span pour afficher le total des prix total)
+
  const totalPrice = document.getElementById('totalPrice');
- // Recuperation de l'element graphique delete item (class pour afficher le total des prix total)
+
  const deleteItems = document.getElementsByClassName('deleteItem');
  // Definition de la variable qui va sommer les quantités
  let sumQuantity = 0;
@@ -16,10 +16,7 @@
  // Appel de la fonction displayPanier
  displayPanier();
 
- /* 
-     Fontion qui affiche le panier avec tous les produits achetés
-     Elle calculera egalement la somme des quantités dans la boucle qui affiche le contenu du panier
- */
+
  async function displayPanier() {
      panier = panier ? panier : []
          // Copie de la liste de panier pour pouvoir avoir la possibilité de modifier panier dans la boucle
@@ -37,7 +34,7 @@
                      sumPrice += Number(produit.quantite) * Number(article.price);
                      // Appel de la fonction displayProduit
                      displayProduit(produit, article);
-                     // Affichage du total des prix total (verification de l'existance de l'element totalPrice)
+                     // Affichage du total des prix  (verification de l'existance de l'element totalPrice)
                      if (totalPrice) {
                          totalPrice.innerHTML = sumPrice;
                      }
@@ -68,21 +65,12 @@
      }
  }
 
- /* 
-    Fonction d'appel de API qui retourne un produit en fonction de son id.
-    param : id = l'identifiant du produit
- */
+
  function findArticleById(id) {
      return fetch("http://localhost:3000/api/products/" + id).then((res) => res.json());
  }
 
- /* 
-    Fonction qui affiche le detail d'un contenu du panier
-    Définition des evenements sur la modification de la quantité et le clic sur le bouton supprimer
-    param : index = position de du produit dans la liste panier
-            produit = element produit ajouté dans le panier
-            article = element article pris depuis la base de donnée
- */
+
  function displayProduit(produit, article) {
      // Ajout de l'expression HTML du produit (balise article) dans le panier (element cartItem)
      cartItem.innerHTML += `<article class="cart__item" data-id="${article._id}" data-color="${produit.couleur}">
@@ -108,12 +96,7 @@
               </article>`;
  }
 
- /* 
-    Fonction qui definit l'evenement sur le click du bouton supprimer
-    param : index = position de du produit dans la liste panier
-            produit = element produit ajouté dans le panier
-            contenu = element HTML du contenu du panier
- */
+
  function addEventDelete(index, contenu, produit) {
      // Recuperation de la liste des bouton supprimer definit sur le panier
      const btns_supprimer = contenu.getElementsByClassName('deleteItem');
@@ -126,14 +109,7 @@
      }
  }
 
- /* 
-    Fonction qui supprime un contenu du panier 
-    Recalcule de total quantite et de total prix
-    Sauvegarde de la liste dans le localStorage
-    param : index = position de du produit dans la liste panier
-            produit = element produit ajouté dans le panier
-            contenu = element HTML du contenu du panier
- */
+
  function deleteItem(index, contenu, produit) {
      // Verification de l'existance de l'element contenu
      if (contenu) {
@@ -154,12 +130,6 @@
      }
  }
 
- /* 
-    Fonction qui definit l'evenement sur le changement de la quantitée
-    param : index = position de du produit dans la liste panier
-            produit = element produit ajouté dans le panier
-            contenu = element HTML du contenu du panier
- */
  function addEventChange(index, contenu, produit) {
      // Recuperation de la liste des champs de quantité
      const inputs_quantite = contenu.getElementsByClassName('itemQuantity');
@@ -172,14 +142,7 @@
      }
  }
 
- /* 
-    Fonction qui modifie un contenu du panier 
-    Recalcule de total quantite et de total prix
-    Sauvegarde de la liste dans le localStorage
-    param : value = la nouvelle value du produit
-            index = position du produit dans la liste panier
-            produit = element produit ajouté dans le panier
- */
+
  function changeItem(value, index, produit) {
      // Recalcule et Affichage du total des quantités (verification de l'existance de l'element totalQuantity)
      if (totalQuantity) {
@@ -192,7 +155,12 @@
      // Modification de la valeur de la quantité dans le produit
      produit.quantite = Number(value);
      // Modification de l'element dans la liste panier
-     panier[index] = produit;
+     let newProduit = {
+         produit: produit.produit,
+         couleur: produit.couleur,
+         quantite: Number(produit.quantite),
+     };
+     panier[index] = newProduit;
      // Sauvegarde de la liste panier modifié dans le localStorage
      localStorage.setItem("panier", JSON.stringify(panier));
  }
@@ -220,22 +188,22 @@
          validFirstName(this);
      });
 
-     // Ecoute de la modification du prénom
+     // Ecoute de la modification du nom
      form.lastName.addEventListener('change', function() {
          validLastName(this);
      });
 
-     // Ecoute de la modification du prénom
+     // Ecoute de la modification de l'adresse
      form.address.addEventListener('change', function() {
          validAddress(this);
      });
 
-     // Ecoute de la modification du prénom
+     // Ecoute de la modification du ville
      form.city.addEventListener('change', function() {
          validCity(this);
      });
 
-     // Ecoute de la modification du prénom
+     // Ecoute de la modification de l'email
      form.email.addEventListener('change', function() {
          validEmail(this);
      });

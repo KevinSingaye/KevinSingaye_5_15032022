@@ -14,6 +14,8 @@ function displayItem(data) {
     let items = document.getElementById("items")
     for (let i = 0; i < data.length; i++) {
         const item = data[i]
+
+        //-- Ajout de l'expression HTML du produit au sein de la section items
         items.innerHTML += ` <a href="./product.html?id=${item._id}">
             <article>
               <img src="${item.imageUrl}" alt="${item.altTxt}">
