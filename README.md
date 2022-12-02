@@ -15,7 +15,7 @@ server runs on another port for any reason, this is printed to the
 console when the server starts, e.g. `Listening on port 3001`.
 
 
-const url = "http://127.0.0.1:5500/front/html/index.html"
+
 
 
 
