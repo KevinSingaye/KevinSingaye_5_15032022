@@ -3,7 +3,7 @@
 
 
 
-# Front end repository : https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6
+### Front end repository : https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6
 
 ### Back end Prerequisites ###
 
