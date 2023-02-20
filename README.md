@@ -11,6 +11,7 @@ Il est nécessaire d'installer au préalable "Node" et "Npm" localement.
 Cloner ce repo. En partant du dossier "Back" du projet, tapez dans la console comme commande  "npm install". 
 Vous pouvez ensuite lancer le server en utilisant la commande "node server".
 Le serveur devrait se lancer sur "localhost" avec par défaut le port "3000".
+
 ===========
 
 / English /
